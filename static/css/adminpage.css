@@ -1,0 +1,48 @@
+#adminpageContent{
+	margin-top:60px;
+}
+
+#addEmployeeButton{
+	margin-top: 20px;
+}
+#addEmployeeDiv{
+	margin-top:20px;
+}
+
+#addEmployeeForm >.form-group label , #EmployeeFormAssignmentLabel{
+	display: inline-block;
+	width: 150px;
+	vertical-align: middle;
+	margin-right:10px;
+}
+
+#addEmployeeForm >.form-group> .grade-checkbox > label{
+	width:80px;
+}
+
+#addEmployeeForm > .form-group input[type="text"] , #addEmployeeForm > .form-group input[type="password"]{
+	display: inline-block;
+	width: 300px;
+	vertical-align: middle;
+}
+
+#addAssignmentForm > .form-group textarea{
+	vertical-align: middle;
+	display: inline-block;
+}
+
+#addAssignmentForm > .form-group label{
+	vertical-align: middle;
+	display: inline-block;
+	margin-right: 5px;
+
+}
+
+#EmployeeFormAssignments label{
+	display: inline-block;
+}
+#EmployeeFormAssignments span{
+	font-weight: normal;
+	margin-left: 10px;
+	display: inline-block;
+}

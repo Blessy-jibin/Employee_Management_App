@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block customstyle %}
+   <link rel="stylesheet" type="text/css" href="{% static "css/adminpage.css" %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container" ng-controller="adminController"  id="adminpageContent"  style="width:100%" ng-init="initializeAdminController();">
+    <button ng-click="addEmployee();" ng-hide="hide_add_employee_button" id="addEmployee-button">Add an Employee</button>
+    <div ng-show="show_add_employee_form" id="addEmployeeDiv">
+        <form name="addEmployeeForm" id="addEmployeeForm">
+            <div class="form-group" style="">
+                <label>Username:</label>
+                <input type="text"  class="form-control"   ng-model="new_employee.username"  oninvalid="this.setCustomValidity('Please Enter the Username')" oninput="setCustomValidity('')" placeholder="Enter the username here"required>
+            </div>
+            <div class="form-group" style="">
+                <label>Password:</label>
+                <input type="password"  class="form-control"  ng-model="new_employee.password" placeholder="Type password here" required>
+            </div>
+            <div class="form-group" style="">
+                <label>Confirm password:</label>
+                <input type="password"  class="form-control" ng-model="new_employee.confirm_password" placeholder="Repeat password here" required>
+            </div>
+            <div class="form-group" style="">
+                  <label>Emailaddress:</label>
+                  <input type="text"  class="form-control" ng-model="new_employee.email" placeholder="eg:bmx@asd.com"  required>
+            </div>
+            <div class="form-group">
+                <label for="addEmployee-form-grade">Select grade:</label>
+                <span ng-repeat="grade in grades" class="grade-checkbox">
+                    <input type="checkbox" ng-model="selectedgrade"  ng-change= "changeGrade(grade);"/>
+                    <label for="[{grade}]">[{grade}]</label>
+                </span>
+            </div>
+            <div ng-if="new_employee.assignments.length>0" id="EmployeeFormAssignments">
+                <label id="EmployeeFormAssignmentLabel">Assignments<label>
+                <div ng-repeat="each in new_employee.assignments track by $index">
+                    <label style="margin-right:5px;">Title:</label>
+                    <span>[{each.title}]
+                    </span>
+                    <label>Description:</label>
+                    <span>[{each.description}]
+                    </span>
+                </div>
+            </div>
+            <button id="addAssignmentButton"  data-toggle="modal" data-target="#AssignmentModal" ng-click="addAssignment();">Assign Assignment
+            </button>
+        </form>
+        <div class="modal fade" id="AssignmentModal" tabindex="-1" role="dialog" aria-labelledby="AssignmentModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form name="addAssignmentForm" id="addAssignmentForm">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="form-group">
+                            <label>Assignment Title:</label>
+                            <input type="text" placeholder="Enter Assignment Title"required ng-model="assignment.title">
+                        </div>  
+                      </div>
+                      <div class="modal-body">
+                        <div class="form-group">
+                            <label>Description about Assignment:</label>
+                           <textarea placeholder="Describe the assignmnet"  required ng-model="assignment.description"></textarea> 
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" ng-click=" addAssignmentForm.$valid && assignAssignment();">Add Assignment</button>
+                      </div>
+                    </form>
+                </div>
+              </div>
+        </div><!--modal closing here-->
+    </div><!--closing of employee add div-->
+</div> <!--closing of adminpage-content at top level-->  
+{% endblock %}

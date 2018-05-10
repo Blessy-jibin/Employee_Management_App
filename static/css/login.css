@@ -1,0 +1,230 @@
+/*body {
+    padding-top: 90px;
+}
+*/
+#login_container{
+	margin: 0px;
+	padding:15px;
+	width: 100%;
+}
+
+.v-center {
+  position: relative;
+  transform: translateY(50%);
+}
+
+#logo{
+
+/*left:34px;
+*/}
+
+#tagline{
+	padding-top:65px;
+	
+}
+#first_row{
+	margin:15px 0px;
+}
+ #second_row{
+ 	margin:15px 0px;
+ 	align-items: center;
+ }
+
+#working_man_pic{
+	padding-top:65px;
+}
+
+
+/*#sign_inform{
+	position: absolute;
+	top:150px;
+}
+*/#SignIn_button{
+	margin-top: 5px;
+
+}
+.panel-login {
+	border-color: #ccc;
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+}
+.panel-login>.panel-heading {
+	color: #00415d;
+	background-color: #fff;
+	border-color: #fff;
+	text-align:center;
+}
+.panel-login>.panel-heading a{
+	text-decoration: none;
+	color: #666;
+	font-weight: bold;
+	font-size: 15px;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	transition: all 0.1s linear;
+}
+.panel-login>.panel-heading a.active{
+	color: #029f5b;
+	font-size: 18px;
+}
+.panel-login>.panel-heading hr{
+	margin-top: 10px;
+	margin-bottom: 0px;
+	clear: both;
+	border: 0;
+	height: 1px;
+	background-image: -webkit-linear-gradient(left,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.15),rgba(0, 0, 0, 0));
+	background-image: -moz-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+	background-image: -ms-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+	background-image: -o-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+}
+.panel-login input[type="text"],.panel-login input[type="email"],.panel-login input[type="password"] {
+	height: 45px;
+	border: 1px solid #ddd;
+	font-size: 16px;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	transition: all 0.1s linear;
+}
+.panel-login input:hover,
+.panel-login input:focus {
+	outline:none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	border-color: #ccc;
+}
+.btn-login {
+	background-color: #1a75ff;
+	outline: none;
+	color: #fff;
+	font-size: 14px;
+	height: auto;
+	font-weight: normal;
+	padding: 14px 0;
+	text-transform: uppercase;
+	border-color: #59B2E6;
+	border-radius: 25px;
+}
+.btn-login:hover,
+.btn-login:focus {
+	color: #fff;
+	background-color: #53A3CD;
+	border-color: #53A3CD;
+}
+.forgot-password {
+	text-decoration: none;
+	color: #00ace6;
+}
+.forgot-password:hover,
+.forgot-password:focus {
+	text-decoration: underline;
+	color: #666;
+}
+
+.btn-register {
+	background-color: #1a75ff;
+	outline: none;
+	color: #fff;
+	font-size: 14px;
+	height: auto;
+	font-weight: normal;
+	padding: 14px 0;
+	text-transform: uppercase;
+	border-color: #1a75ff;
+	border-radius: 25px;
+}
+.btn-register:hover,
+.btn-register:focus {
+	color: #fff;
+	background-color: #1CA347;
+	border-color: #1CA347;
+}
+
+#remember_me,#termsandconditions{
+	font-family: Roboto;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 16px;
+	font-size: 13px;
+	color: #828282;
+	display: inline-block;
+	width:88%;
+	margin-left:2%;
+	vertical-align: middle;
+}
+
+
+/*googe auth */
+
+.customBtn {
+  display: inline-block;
+  background: white;
+  color: #444;
+  width: 190px;
+  border-radius: 5px;
+  border: thin solid #888;
+  box-shadow: 1px 1px 1px grey;
+  white-space: nowrap;
+}
+.customBtn:hover {
+  cursor: pointer;
+}
+span.label {
+  font-family: serif;
+  font-weight: normal;
+}
+span.icon {
+  background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  width: 42px;
+  height: 42px;
+}
+span.buttonText {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 42px;
+  padding-right: 42px;
+  font-size: 14px;
+  font-weight: bold;
+  /* Use the Roboto font that is loaded in the <head> */
+  font-family: 'Roboto', sans-serif;
+}
+
+@media(min-width: 768px){
+
+#second_row{
+	padding-top: 90px;
+}
+}
+
+
+  /* medium devices like tablets*/
+@media(max-width:769px){
+	/*#sign_inform{
+		position: absolute;
+		top:150px;
+	}
+*/
+
+ /*#second_row, #first_row{
+ 	margin: 0px;
+ }*/
+}
+
+
+/*extra small*/
+@media(max-width:576px){
+  #tagline{
+  	margin-bottom:30px;
+
+	padding-top:15px;
+	
+
+  }
+  #sign_inform{
+  	margin-bottom:10px;
+  }
+}
