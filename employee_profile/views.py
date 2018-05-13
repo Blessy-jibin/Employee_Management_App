@@ -9,8 +9,8 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
-from .serializers import ( UserSerializer)
-from .models import Assignment
+from .serializers import ( UserSerializer,EmployeeSerializer,DaySerializer,GradeSerializer)
+from .models import Assignment,Day,Grade,Admin,Employee
 from django.shortcuts import render_to_response
 from django.http import Http404
 from rest_framework.views import APIView
@@ -61,9 +61,61 @@ def login(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def adminpage(request):
-    #boards = Board.objects.all()
     return render_to_response('adminpage.html',locals())
 
+
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
+class Employee(generics.ListCreateAPIView):
+    """
+    List all employee, or create a new employee.
+    
+    """
+    # permission_classes = (IsAuthenticated,)
+    serializer_class = EmployeeSerializer
+
+
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+class CreateEmployee(generics.ListCreateAPIView):
+    """
+    List all employee, or create a new employee.
+    
+    """
+    permission_classes = (IsAuthenticated,)
+    
+    def post(self, request, *args,**kwargs):
+        user_serializer = UserSerializer(data=request.data)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            request.data.update({'user':user_serializer.data})
+            emp_serializer = EmployeeSerializer(data=request.data)
+            if emp_serializer.is_valid():
+            	emp_serializer.save()
+            return Response(emp_serializer.data)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
+
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+class Day(generics.ListCreateAPIView):
+	"""
+    List all days
+    
+    """
+	permission_classes = (IsAuthenticated,)
+	serializer_class = DaySerializer
+	queryset = Day.objects.all()
+
+class Grade(generics.ListCreateAPIView):
+	"""
+    List all grades
+    
+    """
+	permission_classes = (IsAuthenticated,)
+	serializer_class = GradeSerializer
+	queryset = Grade.objects.all()
 
 
 

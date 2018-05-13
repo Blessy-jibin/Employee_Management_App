@@ -1,26 +1,26 @@
-#adminpageContent{
+#admin_page_content{
 	margin-top:60px;
 }
 
-#addEmployeeButton{
+#add_employee_button{
 	margin-top: 20px;
 }
-#addEmployeeDiv{
+#add_employee_div{
 	margin-top:20px;
 }
 
-#addEmployeeForm >.form-group label , #EmployeeFormAssignmentLabel{
+#add_employee_form >.form-group label , #employee_form_assignmentLabel{
 	display: inline-block;
 	width: 150px;
 	vertical-align: middle;
 	margin-right:10px;
 }
 
-#addEmployeeForm >.form-group> .grade-checkbox > label{
+#add_employee_form >.form-group> .grade-checkbox > label{
 	width:80px;
 }
 
-#addEmployeeForm > .form-group input[type="text"] , #addEmployeeForm > .form-group input[type="password"]{
+#add_employee_form > .form-group input[type="text"] , #add_employee_form > .form-group input[type="password"]{
 	display: inline-block;
 	width: 300px;
 	vertical-align: middle;
@@ -38,10 +38,10 @@
 
 }
 
-#EmployeeFormAssignments label{
+#employee_form_assignments label{
 	display: inline-block;
 }
-#EmployeeFormAssignments span{
+#employee_form_assignments span{
 	font-weight: normal;
 	margin-left: 10px;
 	display: inline-block;
