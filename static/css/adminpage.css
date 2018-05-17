@@ -5,8 +5,17 @@
 #add_employee_button{
 	margin-top: 20px;
 }
+
+#search_employee_button{
+	margin-left: 100px;
+}
+
 #add_employee_div{
 	margin-top:20px;
+}
+
+#search_employees_div{
+	margin-top: 20px;
 }
 
 #add_employee_form >.form-group label , #employee_form_assignmentLabel{
@@ -45,4 +54,11 @@
 	font-weight: normal;
 	margin-left: 10px;
 	display: inline-block;
+}
+#employee_list{
+	margin-top: 10px;
+}
+
+#no_employees_to_show{
+	margin-top: 20px;
 }

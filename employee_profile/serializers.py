@@ -19,6 +19,7 @@ from datetime import datetime
 # from selenium import webdriver
 import sys;
 
+
 DRIVER = settings.BASE_DIR+'/chrome_server/chromedriver'
 
 
@@ -27,92 +28,81 @@ class GradeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Grade
-        fields=('grade',)
+        fields=('grade','id')
 
 class DaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Day
-        fields=('day',)
+        fields=('day','id')
+        
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password','id')
+        extra_kwargs = {'password': {'write_only': True},'id':{'read_only':True}}
+
+    
+    # def create(self, validated_data):
+    #     user = User(
+    #         email = validated_data.pop("email"),
+    #         username = validated_data.pop("username")
+    #     )
+    #     user.set_password(validated_data.pop("password"))
+    #     user.save()
+        
+    #     return user  
+
+class AssignmentSerializer(serializers.ModelSerializer):
+
+    
+    class Meta:
+        model = Assignment
+        fields =('title','description','start_date','end_date','status',)
+
 
 class EmployeeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Employee
-        fields =('is_admin','days','grades','user')
-        days = DaySerializer(many=True)
-        grades = GradeSerializer(many=True)
-
-    days = DaySerializer(many=True)
-    grades = GradeSerializer(many=True)
-
+        fields =('id','user','is_admin','days','grades','assignments')
+        extra_kwargs = {'is_admin': {'write_only': True},'id':{'read_only':True}}
+    days = DaySerializer(many=True,required=False)
+    grades = GradeSerializer(many=True,required=False)
+    assignments = AssignmentSerializer(many=True,required=False)
+    user =  UserSerializer(required=False)
     def create(self,validated_data):
         emp = validated_data
         days = emp.pop('days')
         grades = emp.pop('grades')
+        user = emp.pop('user')
+        assignments = emp.pop('assignments')
+        user = User.objects.create(**user)
         employee = Employee(user=user,**emp)
         employee.save()
         day_lis =[]
-        garde_lis= []
+        grade_lis= []
+        assignment_lis=[]
         for day in days:
             d = Day.objects.get(day=day['day'])
             day_lis.append(d)
         for grade in grades:
             g = Grade.objects.get(grade=grade['grade'])
-            garde_lis.append(g)
+            grade_lis.append(g)
         employee.days.set(day_lis)
-        employee.grades.set(garde_lis)
+        employee.grades.set(grade_lis)
+        for assignment in assignments:
+            a = Assignment.objects.create(employee=employee,**assignment)
         return employee
 
-        
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('username', 'email', 'password', 'employee')
-#         extra_kwargs = {'password': {'write_only': True}}
+    def update(self,employee,validated_data):
+        assignments = validated_data.pop('assignments') 
+        for assignment in assignments:
+            dic={'title':assignment.get('title'),'description':assignment.get('description'),'start_date':assignment.get('start_date'),'end_date':assignment.get('end_date'),'status':assignment.get('status')}
+            a = Assignment.objects.create(employee=employee,**dic)   
+        return employee
 
-#     employee =  EmployeeSerializer(write_only=True)
 
-#     def create(self, validated_data):
-#         user = User(
-#             email = validated_data.pop("email"),
-#             username = validated_data.pop("username")
-#         )
-#         user.set_password(validated_data.pop("password"))
-#         user.save()
-#         emp = validated_data.pop('employee')
-#         days = emp.pop('days')
-#         grades = emp.pop('grades')
-#         new_employee = Employee(user=user,**emp)
-#         new_employee.save()
-#         day_lis =[]
-#         garde_lis= []
-#         for day in days:
-#             d = Day.objects.get(day=day['day'])
-#             day_lis.append(d)
-#         for grade in grades:
-#             g = Grade.objects.get(grade=grade['grade'])
-#             garde_lis.append(g)
-#         new_employee.days.set(day_lis)
-#         new_employee.grades.set(garde_lis)
-#         return user  
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
-
-    
-    def create(self, validated_data):
-        user = User(
-            email = validated_data.pop("email"),
-            username = validated_data.pop("username")
-        )
-        user.set_password(validated_data.pop("password"))
-        user.save()
-        
-        return user  
 
     
 
