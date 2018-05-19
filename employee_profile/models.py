@@ -15,7 +15,7 @@ class Grade(models.Model):
 		return self.grade
 
 class Employee(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='user')
 	is_admin = models.BooleanField(default=False)
 	days = models.ManyToManyField(Day)
 	grades = models.ManyToManyField(Grade)

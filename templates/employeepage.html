@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block customstyle %}
+   <link rel="stylesheet" type="text/css" href="{% static "css/employeepage.css" %}">
+{% endblock %}
+
+{% block content %}
+<div class="container" ng-controller="employeeController"  id="employee_page_content"  style="width:100%" ng-init="initializeEmployeeController();">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header col-xs-3 " style="display:inline-block;vertical-align: middle;">
+              <a class="navbar-brand" href="" id="appname">
+                EmployeeMangemnt App
+              </a>
+          </div>
+          <ul class="nav nav-bar v-center col-xs-offset-8 col-xs-1" style="float:right;font-size:17px;text-align:center;">
+            <li style="text-align: center;" class="dropdown" data-toggle="dropdown"> 
+                  <a class="glyphicon glyphicon-option-vertical dropdown-toggle" data-toggle="dropdown" href="#" >
+                  </a>
+                  <ul class="dropdown-menu" role ="menu" style="left: auto;right: 0;" aria-labelledby="dropdownMenu">
+                    <li>
+                      <a href="#" class="row">
+                          <span class="col-xs-7 col-xs-offset-2" ng-click="logout()">Logout</span>
+                      </a>
+                    </li>
+                  </ul>
+            </li>
+           </ul>
+        </div>
+    </nav>  
+
+    <h3 id="welcome_message">Welcome </h3>
+    <div id="assignments">
+        <h4>Your Assignments</h4>
+        <div id="pending_assignments_div" class="assignment_category_div">
+          <h5 class="assignment_category">Pending Assignmets</h5>
+          <table ng-show="count_pending.length>0">
+            <tr>
+              <th>Assignment Title</th>
+              <th>Assignment descripttion</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Status</th>
+            </tr>
+            <tr ng-repeat="assignment in emp.assignments|filter:{status:'pending'} as count_pending track by $index">
+              <td>[{assignment.title}]</td>
+              <td>[{assignment.description}]</td>
+              <td>[{assignment.start_date | date}]</td>
+              <td>[{assignment.end_date | date }]</td>
+              <td>[{assignment.status}]..</td>
+              <td id ="accept_button"><button class="btn btn-success" ng-click="acceptAssignment(assignment);">Accept</button></td>
+              <td id ="decline_button"><button class="btn btn-danger" ng-click="declineAssignment(assignment);">Decline</button></td>
+            </tr>
+          </table>
+          <!-- <div ng-repeat=" assignment in emp.assignments|filter:{status:'pending'} as count_pending track by $index">
+            <span><b>Title:</b>[{assignment.title}]</span>
+            <span><b>Description:</b>[{assignment.description}]</span>
+            <span><b>From:</b>[{assignment.start_date | date}]</span>
+            <span><b>To:</b>[{assignment.end_date | date }]</span>
+            <span class="pending">[{assignment.status}]...</span>
+            <button ng-click="acceptAssignment(assignment);">Accept</button>
+            <button ng-click="declineAssignment(assignment);" id="decline_button">Decline</button>
+              <hr>
+          </div> -->
+          <div ng-show="count_pending.length==0">
+            You dont have pending Assignmets
+          </div>
+        </div>
+
+        <div id="accepted_assignments_div" class="assignment_category_div"> 
+          <h5 class="assignment_category">Accepted Assignments</h5>
+          <table ng-show="count_accepted.length>0">
+            <tr>
+              <th>Assignment Title</th>
+              <th>Assignment descripttion</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Status</th>
+            </tr>
+            <tr ng-repeat="assignment in emp.assignments|filter:{status:'accepted'} as count_accepted track by $index">
+              <td>[{assignment.title}]</td>
+              <td>[{assignment.description}]</td>
+              <td>[{assignment.start_date | date}]</td>
+              <td>[{assignment.end_date | date }]</td>
+              <td>[{assignment.status}]..</td>
+              
+            </tr>
+          </table>
+          <!-- <div ng-repeat=" assignment in emp.assignments|filter:{status:'accepted'} as count_accepted track by $index">
+            <span><b>Title:</b>[{assignment.title}]</span>
+            <span><b>Description:</b>[{assignment.description}]</span>
+            <span><b>From:</b>[{assignment.start_date | date}]</span>
+            <span><b>To:</b>[{assignment.end_date | date}]</span>
+            <span class="accepted">[{assignment.status}]</span>
+              <hr>
+          </div> -->
+          <div ng-show="count_accepted.length==0">
+            You dont have accepted Assignmets
+          </div>
+        </div>
+
+        <div id="declined_assignments_div" class="assignment_category_div">
+          <h5 class="assignment_category">Declined Assignmets</h5>
+          <table ng-show="count_declined.length>0">
+            <tr>
+              <th>Assignment Title</th>
+              <th>Assignment descripttion</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Status</th>
+            </tr>
+            <tr ng-repeat="assignment in emp.assignments|filter:{status:'declined'} as count_declined track by $index">
+              <td>[{assignment.title}]</td>
+              <td>[{assignment.description}]</td>
+              <td>[{assignment.start_date | date}]</td>
+              <td>[{assignment.end_date | date }]</td>
+              <td>[{assignment.status}]..</td>
+            </tr>
+          </table>
+          <!-- <div ng-repeat=" assignment in emp.assignments|filter:{status:'declined'} as count_declined track by $index">
+            <span><b>Title:</b>[{assignment.title}]</span>
+            <span><b>Description:</b>[{assignment.description}]</span>
+            <span><b>From:</b>[{assignment.start_date | date}]</span>
+            <span><b>To:</b>[{assignment.end_date | date}]</span>
+            <span class="declined">[{assignment.status}]</span>
+              <hr>
+          </div> -->
+          <div ng-show="count_declined.length==0">
+            You dont have  declined assignmentss
+          </div>
+        </div>  
+    </div><!--Assignment div closes here-->
+</div><!--top level div employee_page_content closes here-->
+{% endblock %}

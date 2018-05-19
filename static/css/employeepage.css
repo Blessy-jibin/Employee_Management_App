@@ -1,0 +1,63 @@
+#employee_page_content{
+	margin-left: 50px;
+}
+
+#welcome_message{
+	margin-top: 60px;
+	margin-bottom: 20px;
+	/*font-weight: bold;*/
+	/*margin-left: 50px;*/
+	/*font-family: Impact, Charcoal, sans-serif;
+	font-size: 40px;*/
+}
+
+
+
+.pending{
+	color:red;
+	text-transform: capitalize;
+	margin-left: 10px;
+}
+.assignment_category{
+	font-weight: bold;
+	text-decoration: underline;
+
+}
+
+#assignments > h4{
+	color:#3359cc;
+	font-weight: bold;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+    width:5%;
+}
+
+/*tr:nth-child(even) {
+    background-color: #dddddd;
+}*/
+#pending_assignments_div{
+	margin-top: 30px;
+}
+
+.assignment_category_div{
+	margin-bottom: 50px;
+}
+
+#accept_button,#decline_button{
+	background-color: #fff;
+	border: none;
+	margin-left:2px;
+	margin-right: 2px;
+	text-align: left;
+	width: 1%;
+}

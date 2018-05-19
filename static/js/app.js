@@ -68,7 +68,9 @@ app.controller('loginController', function ($scope, $http, $rootScope, $cookies)
 			if(data.status == 200){
 				$scope.login_error_status = false;
                 localStorage.setItem("c_token", data.data.token);
-                superuser = data.data.admin;
+                $rootScope.logged_in_user_id = data.data.id;
+                superuser = data.data.is_admin;
+                console.log('id',data.data.id);
                 if(superuser){
                 window.location.replace("/adminhome");
                 }else{
@@ -84,7 +86,7 @@ app.controller('loginController', function ($scope, $http, $rootScope, $cookies)
 
 
 
-app.controller("adminController", function($scope,$http, $rootScope, $cookies,$mdDialog,$q) {
+app.controller("adminController", function($scope,$http, $rootScope, $cookies,$mdDialog,$q,$timeout) {
 
     $scope.initializeAdminController = function(){
         $scope.show_add_employee_form = false; 
@@ -126,7 +128,8 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         constructor() {
             this.grades  = [];
             this.days = [];
-            this.date ={};
+            this.start_date ="";
+            this.end_date = "";
             
         }
     }
@@ -188,6 +191,7 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         $scope.show_search_employees_form = true;
         $scope.show_add_employee_form = false;//hide the add Employee form
         $scope.search = new Search();
+        $scope.search_invalid_dates =false;
         
     };
 
@@ -236,21 +240,27 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         $scope.selectedEmployee = new Employee();
         $scope.selectedEmployee = emp;
         assignments = $scope.selectedEmployee.assignments;
+        $scope.assignment_dates_invalid = false;
+        $scope.already_assignment = false;
     }
 
     $scope.assignAssignment = function(){
         start_date = new Date($scope.assignment.start_date);
         end_date =new Date( $scope.assignment.end_date); 
+        console.log(start_date,end_date);
         if(start_date > end_date){
-            alert('start_date is greater than end_date');
+            $scope.assignment_dates_invalid = true;
+            // alert('start_date is greater than end_date');
         }
 
         if(start_date <= end_date){
+            $scope.assignment_dates_invalid = false;
             length = $scope.selectedEmployee.assignments.length;//check is there assignments there
             // no assignments add one
             if(length==0){
-                $scope.selectedEmployee.assignments.push($scope.assignment);
-                updateEmployee($scope.selectedEmployee.id,$scope.selectedEmployee)
+                // $scope.selectedEmployee.assignments.push($scope.assignment);
+                // updateEmployee($scope.selectedEmployee.id,$scope.selectedEmployee)
+                addAssignment($scope.selectedEmployee.id,$scope.assignment);
             }
             //already assignment. check for dates
             if(length>0){
@@ -258,10 +268,13 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
                 smallest_date = dates.smallest_date;
                 largest_date = dates.largest_date;
                 if(start_date>largest_date || end_date<smallest_date){
-                    $scope.selectedEmployee.assignments.push($scope.assignment);
-                    updateEmployee($scope.selectedEmployee.id,$scope.selectedEmployee)
+                    console.log('valid date');
+                    $scope.already_assignment  = false;
+                    addAssignment($scope.selectedEmployee.id,$scope.assignment);
+
                 }else{
-                    alert('Already assignment in the time period');
+                    // alert('Already assignment in the time period');
+                    $scope.already_assignment  = true;
                 }  
             }
         }
@@ -273,6 +286,7 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         console.log(employee_data);
         uncheckAll();
         createNewEmployee(employee_data,$cookies);
+        $scope.error_creating_employee = false;
      }
 
     function createNewEmployee(employee_data,$cookies) {
@@ -288,10 +302,15 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
                 $scope.show_add_employee_form = false;
                 $scope.hide_add_employee_button = false;
                 uncheckAll();
+                $scope.sucess_creating_employee = true;
+                $timeout(function(){
+                    $scope.sucess_creating_employee = false;
+                }, 2000);
             }
         }, function (error) {
-            if(error.status == 401){
-                
+            if(error.status == 400){
+                $scope.error_creating_employee = true;
+                console.log('error',$scope.error_creating_employee);
             }
         });
      };
@@ -300,8 +319,10 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         var search_data = $scope.search;
         days = search_data.days;
         grades = search_data.grades;
+        start_date = search_data.start_date;
+        end_date = search_data.end_date;
+        console.log(search_data);
         if(days.length>0){
-
             days = days.join(",");
         }
         else{
@@ -316,7 +337,13 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         search_data.days = days;
         search_data.grades = grades;
         uncheckAll();
-        getEmployees(search_data,$cookies);
+        if(  new Date(end_date) >= new Date(start_date) )
+        {
+            getEmployees(search_data,$cookies);
+            $scope.search_invalid_dates = false;
+        }else{
+            $scope.search_invalid_dates = true;
+        }
     }
 
     function getEmployees(search_data,$cookies) {
@@ -331,13 +358,10 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
             if(data.status == 200){
                  $scope.show_search_employees_form = false; 
                  uncheckAll();
-                 if(data.data.length == 0){
-                    $scope.no_employee_message = true;
-                 }
                 $scope.emp = data.data;
             }
         }, function (error) {
-            if(error.status == 401){
+            if(error.status == 400){
                 
             }
         });
@@ -390,6 +414,7 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
 
     function updateEmployee(id,employee_data){
         var headers = get_http_header($cookies);
+        console.log(employee_data);
         $http({
           method: 'PUT',
           url: '/employee/'+id ,
@@ -398,6 +423,7 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         }).then(function (data) {
             if(data.status == 200){
                  console.log(data.data);
+
                  $('#AssignmentModal').modal('hide');
                  
             }
@@ -409,5 +435,119 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
 
 
     };
+
+    function addAssignment(id,assignment){
+        var headers = get_http_header($cookies);
+        // console.log(employee_data);
+        data = {};
+        data.employee_id = id;
+        data.assignment = assignment;
+        $http({
+          method: 'POST',
+          url: '/assignment',
+          headers: headers,
+          data: data,
+        }).then(function (data) {
+            if(data.status == 200){
+                 console.log(data.data);
+                 $scope.selectedEmployee.assignments.push($scope.assignment);
+                 $('#AssignmentModal').modal('hide');
+                 
+            }
+        }, function (error) {
+            if(error.status == 401){
+                
+            }
+        });
+
+
+
+    };
+
+    $scope.get_date_in_YyMmDd = function(date){
+        date = new Date();
+       var dd = date.getDate();
+       var mm = date.getMonth()+1; //January is 0!
+        var yyyy = date.getFullYear();
+        if(dd<10){
+                dd='0'+dd;
+            } 
+        if(mm<10){
+           mm='0'+mm;
+            } 
+        formated_date = yyyy+'-'+mm+'/'+dd;
+        return formated_date;
+    }
+
 });
 
+app.controller("employeeController", function($scope,$http, $rootScope, $cookies,$mdDialog,$q) {
+    
+    console.log('vvvv');
+    $scope.initializeEmployeeController = function(){
+        getEmployeeInfo();
+        
+    }; 
+
+    function getEmployeeInfo(){
+
+        var headers = get_http_header($cookies);
+        $http({
+          method: 'GET',
+          url: '/employeeinfo',
+          headers: headers,
+        }).then(function (data) {
+            if(data.status == 200){
+                data = data.data;
+                $scope.emp =data[0];
+                console.log($scope.emp);
+            }
+        }, function (error) {
+            if(error.status == 401){
+                
+            }
+        });
+    } 
+
+
+
+    $scope.acceptAssignment = function(assignment){
+        console.log('accpet button clicked');
+        assignment.status = "accepted";
+        updateAssignment(assignment);
+    };
+
+    $scope.declineAssignment = function(assignment){
+        console.log('decline buton clicked');
+        assignment.status = "declined";
+        updateAssignment(assignment);
+    };
+
+    $scope.logout = function ($cookies) {
+        localStorage.setItem("c_token", undefined);
+        window.location.replace("/login");
+    };
+
+    function updateAssignment(assignment){
+        var headers = get_http_header($cookies);
+        // data ={}
+        // data.assignment = assignment;
+        data = assignment
+        console.log(data);
+        $http({
+          method: 'PUT',
+          url: '/assignment',
+          headers: headers,
+          data: data,
+        }).then(function (data) {
+            if(data.status == 200){
+                $scope.selectedAssignment.status = data.data.status;
+                
+            }
+        }, function (error) {
+            if(error.status == 401){
+                
+            }
+        });
+    };    
+});
