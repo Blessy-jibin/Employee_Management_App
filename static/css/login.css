@@ -3,9 +3,10 @@
 }
 */
 #login_container{
-	margin: 0px;
+	margin-top:50px;
 	padding:15px;
 	width: 100%;
+	border: 1px solid white;
 }
 
 .v-center {
@@ -151,7 +152,7 @@
 	color: #828282;
 	display: inline-block;
 	width:88%;
-	margin-left:2%;
+	margin-left:4px;
 	vertical-align: middle;
 }
 

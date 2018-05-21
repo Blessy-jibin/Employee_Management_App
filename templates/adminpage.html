@@ -7,221 +7,217 @@
 {% endblock %}
 
 {% block content %}
-<div class="container" ng-controller="adminController"  id="admin_page_content"  style="width:100%" ng-init="initializeAdminController();">
+<div class="container" ng-controller="adminController"  id="admin_page_content"  style="width:100%;" ng-init="initializeAdminController();">
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
           <div class="navbar-header col-xs-3 " style="display:inline-block;vertical-align: middle;">
-              <a class="navbar-brand" href="" id="appname">
-                EmployeeMangemnt App
+              <a class="navbar-brand" href="#" id="appname">
+                Employee-Management
               </a>
           </div>
-          <ul class="nav nav-bar v-center col-xs-offset-8 col-xs-1" style="float:right;font-size:17px;text-align:center;">
+          <ul class="nav nav-bar v-center col-xs-offset-8 col-xs-1" style="float:right;font-size:17px;text-align:center;vertical-align: middle;">
             <li style="text-align: center;" class="dropdown" data-toggle="dropdown"> 
-                  <a class="glyphicon glyphicon-option-vertical dropdown-toggle" data-toggle="dropdown" href="#" >
-                  </a>
+                  <span id="nav_bar_menu" class="glyphicon glyphicon-option-vertical dropdown-toggle" data-toggle="dropdown"  >
+                  </span>
                   <ul class="dropdown-menu" role ="menu" style="left: auto;right: 0;" aria-labelledby="dropdownMenu">
                     <li>
-                      <a href="#" class="row">
-                          <span class="col-xs-7 col-xs-offset-2" ng-click="logout()">Logout</span>
-                      </a>
+                      <span class="col-xs-7 col-xs-offset-2" ng-click="logout()">Logout</span>
                     </li>
                   </ul>
             </li>
            </ul>
         </div>
     </nav>  
-
-    <h2 id="welcome_message">Welcome to Admin Page</h2>
     <div>
-        <div id="add_employee">
-           <!--  <span>Add new employees</span>
-            <span class="glyphicon glyphicon-plus"></span> -->
-            <button class="btn btn-info" ng-click="addEmployeeInit();" ng-hide="hide_add_employee_button" id="add_employee_button" >Add an Employee</button>
-        </div>
-        <div id="search_employee">
-            <!-- <span>Search for available employess</span>
-            <span class="glyphicon glyphicon-search"></span> -->
-            <button class="btn btn-info" ng-click="searchEmployeeInit();" ng-hide="hide_seacrh_employee_button" id="search_employee_button">Search Employees</button>
-        </div>
+        <div class="allign_center">
+            <div id="add_employee">
+                <button class="btn btn-info" ng-click="addEmployeeInit();" ng-hide="hide_add_employee_button" id="add_employee_button" >Add an Employee</button>
+            </div>
+            <div id="search_employee">
+                <button class="btn btn-info" ng-click="searchEmployeeInit();" ng-hide="hide_seacrh_employee_button" id="search_employee_button">Search Employees</button>
+            </div>
+       </div>
     </div>
     <br>
     <br>
-    <div ng-show="show_add_employee_form" id="add_employee_div">
-        <form name="add_employee_form" id="add_employee_form">
-            <div class="form-group" style="">
-                <label>Username:</label>
-                <input type="text"  class="form-control"   ng-model="newEmployee.user.username"  oninvalid="this.setCustomValidity('Please enter a username')" oninput="setCustomValidity('')" placeholder="Enter username of employee"required>
-            </div>
-            <p ng-show="error_creating_employee" class="error">Employee with username already exists</p>
-            <div class="form-group" style="">
-                <label>Password:</label>
-                <input type="password" name="password" class="form-control"  ng-model="newEmployee.user.password" placeholder="Enter the passowrd of employee" required>
-            </div>
-            <!-- <div class="form-group" style="">
-                <label>Confirm password:</label>
-                <input type="password" name="confirm_password" class="form-control" ng-model="newEmployee.confirm_password" placeholder="Repeat password" required compare-to="newEmployee.password">
-            </div> -->
-            <div class="form-group" style="">
-                <label>Emailaddress:</label>
-                <input type="text"  class="form-control" ng-model="newEmployee.user.email" placeholder="eg:bmx@asd.com"  required>
-            </div>
-            <div class="form-group">
-                <label>Select and assign grades:</label>
-                <span ng-repeat="grade in grades track by grade.id" class="grade-checkbox">
-                    <input type="checkbox" ng-model="grade.Selected" value="[{grade.id}]" ng-change= "changeEmployeeGrades(grade);"/>
-                    <label for="[{grade.id}]">[{grade.grade}]</label>
-                </span>
-            </div>
-            <div class="form-group">
-                <label for="addEmployee-form-grade">Select and assign days:</label>
-                <span ng-repeat="day in days track by day.id" class="grade-checkbox">
-                    <input type="checkbox" ng-model="day.Selected" value="[{day.id}]" ng-change= "changeEmployeeDays(day);"/>
-                    <label for="[{day.id}]">[{day.day}]</label>
-                </span>
-            </div>
-            <!-- <div ng-if="newEmployee.assignments.length>0" id="employee_form_assignments">
-                <label id="employee_form_assignment_label">Assignments<label>
-                <div ng-repeat="each in newEmployee.assignments track by $index">
-                    <label style="margin-right:5px;">Title:</label>
-                    <span>[{each.title}]
-                    </span>
-                    <label>Description:</label>
-                    <span>[{each.description}]
+    <div class="form_block" ng-cloak>
+        <div ng-show="show_add_employee_form" id="add_employee_div">
+            <form name="add_employee_form" id="add_employee_form">
+                <div class="form-group" style="">
+                    <label>Username:</label>
+                    <input type="text"  class="form-control"   ng-model="newEmployee.user.username"  oninvalid="this.setCustomValidity('Please enter a username')" oninput="setCustomValidity('')" placeholder="Enter username of employee"required>
+                </div>
+                <p ng-show="error_creating_employee" class="error">Employee with username already exists</p>
+                <div class="form-group" style="">
+                    <label>Password:</label>
+                    <input type="password" name="password" class="form-control"  ng-model="newEmployee.user.password" placeholder="Enter the passowrd of employee" required>
+                </div>
+                <div class="form-group" style="">
+                    <label>Email:</label>
+                    <input type="text"  class="form-control" ng-model="newEmployee.user.email" placeholder="eg:bmx@asd.com"  required>
+                </div>
+                <div class="form-group">
+                    <label>Grades:</label>
+                    <span ng-repeat="grade in grades track by grade.id" class="grade-checkbox">
+                        <input type="checkbox" ng-model="grade.Selected" value="[{grade.id}]" ng-change= "changeEmployeeGrades(grade);"/>
+                        <label for="[{grade.id}]">[{grade.grade}]</label>
                     </span>
                 </div>
-            </div> -->
-            <!-- <button id="add_assignment_button"  >Assign Assignment
-            </button> -->
-            <button type="submit" ng-click="add_employee_form.$valid && createEmployee() && $event.stopPropagation();" class="btn btn-primary" id="add_button"><span class="glyphicon glyphicon-plus"></span><span>Add</span></button>
-        </form>
-        
-    </div><!--closing of employee add div-->
-    <div ng-show="sucess_creating_employee" class="success">Sucessfully created the employee</div>
-
-
-    <div ng-show="show_search_employees_form" id="search_employees_div">
-        <form name="search_employees_form" id="search_employees_form">
-            <div class="form-group">
-                <label>Search with grades:</label>
-                <span ng-repeat="grade in grades track by grade.id" class="grade-checkbox">
-                    <input type="checkbox"  value="[{grade.id}]" ng-change= "changeSearchGrades(grade.id);" ng-model="grade.Selected"/>
-                    <label for="[{grade.id}]">[{grade.grade}]</label>
-                </span>
-            </div>
-            <div class="form-group">
-                <label for="addEmployee-form-grade">Search with days:</label>
-                <span ng-repeat="day in days track by day.id" class="grade-checkbox">
-                    <input type="checkbox" ng-model="day.Selected" value="[{day.id}]" ng-change= "changeSearchDays(day.id);"/>
-                    <label for="[{day.id}]">[{day.day}]</label>
-                </span>
-            </div>
-            <div class="form-group">
-                    <label style="">From:   <label>
-                    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name=""  style="text-align: center" placeholder="Select a date" ng-model="search.start_date"
-                    required>
-            </div>
-            <div class="form-group">
-                <label>To:   </label>
-                <input data-provide="datepicker"  name="" data-date-format="yyyy-mm-dd" style="text-align: center" placeholder="Select a date" ng-model="search.end_date" required>
-            </div>
-            <p ng-show="search_invalid_dates" class="error"> Search start_date is graeter than end_date</p>
-            <button type="submit" ng-click="search_employees_form.$valid && searchEmployees() && $event.stopPropagation();" class="btn btn-primary" id="search_button"><span class="glyphicon glyphicon-search" style="margin-right:10px;"></span><span>Search</span></button>
-         </form>
-    </div>  <!--Closing of   Search employee from div--> 
-    
-    <!-- <div ng-repeat="emp in emp track by $index"  id="employee_list" ng-show="!show_search_employees_form && !show_add_employee_form">
-        <div style="" id="employee_info">
-            <span><b>Name:</b>[{emp.user.username}]</span>
-            <span><b>Email:</b>[{emp.user.email}]</span>
-        </div>
-        <div style="" id="assignment_list"><b>Assignments:</b>
-            <div ng-show="emp.assignments.length==0 && !show_search_employees_form && !show_add_employee_form">
-                No Assignments to show.Add one.
-            </div>
-            <div ng-repeat="assignment in emp.assignments track by $index" ng-show="emp.assignments.length>0" id="each_assignment">
-                <span><b>Title:</b>[{assignment.title }]</span>
-                <span><b>Description:</b>[{assignment.description}]</span>
-                <span><b>From: </b>[{assignment.start_date | date }] <b>To:</b> [{assignment.end_date | date}]</span>
-                <span><b>Status:</b>[{assignment.status}]</span>
-            </div>
-        </div>
-        <button class="btn btn-primary" data-toggle="modal" data-target="#AssignmentModal" ng-click="addAssignmentInit(emp);" style="display: inline-block;vertical-align: middle;width: 10%;">Add Assignment</button>
-     <hr>   
-    </div>  -->
-   <!--  <table ng-show="emp.length>0 && !show_search_employees_form && !show_add_employee_form">
-        <th rowspan="2">Employee Name</th>
-        <th colspan="3">Assignments</th>
-        <tr>
-            <th>Assignment Title</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-        </tr>
-    </table>
- -->
-    <table ng-show="emp.length>0 && !show_search_employees_form && !show_add_employee_form">
-       <!--  <th rowspan="2">Employee Name</th>
-        <th colspan="3">Assignments</th>
-        <tr>
-            <th>Assignment Title</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-        </tr> -->
-        <tr>
-            <th> Employee Name</th>
-            <td style="padding: 0px;">
-                <table style="width: 100%;margin-top:5px;padding:0px;border:none;">
-                    <tr><b>Assignments</b></tr>
-                    <tr colspan="3">
-                        <th class="child_table_col">Title</th>
-                        <th class="child_table_col">Start Date</th>
-                        <th class="child_table_col">End Date</th>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr ng-repeat = "emp in emp track by $index" style="border:2px solid black;padding: 0px;">
-            <td>[{emp.user.username}]</td>
-            <td ng-if="emp.assignments.length>0" style="padding:0px;height:100%;">
-                <table style="width: 100%;padding:0px;height: 100%;border: none;">
-
-                    <tr ng-repeat="assignment in emp.assignments track by $index">
-                        <td class="child_table_col">[{assignment.title}]</td>
-                        <td class="child_table_col">[{assignment.start_date | date}]</td>
-                        <td class="child_table_col">[{assignment.end_date | date}]</td>
-                    </tr>
-                </table>
-            </td>
-            <td ng-if="emp.assignments.length==0">
-                No assignments
-            </td>
-            <td class="add_assignment_button_column">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#AssignmentModal" ng-click="addAssignmentInit(emp);" style="display: inline-block;vertical-align: middle;">Add Assignment</button>
-            </td>
-        </tr>
+                <div class="form-group">
+                    <label for="addEmployee-form-grade">Days:</label>
+                    <span ng-repeat="day in days track by day.id" class="grade-checkbox">
+                        <input type="checkbox" ng-model="day.Selected" value="[{day.id}]" ng-change= "changeEmployeeDays(day);"/>
+                        <label for="[{day.id}]">[{day.day}]</label>
+                    </span>
+                </div>
+                <button type="submit" ng-click="add_employee_form.$valid && createEmployee() && $event.stopPropagation();" class="btn btn-primary" id="add_button"><span>Add</span></button>
+            </form>
             
-        
-    </table>
-    <div ng-show="emp.length==0" id="no_employees_to_show">
+        </div><!--closing of employee add div-->
+    </div>    
+    <div ng-show="sucess_creating_employee" class="success" ng-cloak>Sucessfully created the employee</div>
+
+    <div class="form_block" ng-cloak>
+        <div ng-show="show_search_employees_form" id="search_employees_div">
+            <form name="search_employees_form" id="search_employees_form">
+                <div class="form-group">
+                    <label>Grades:</label>
+                    <span ng-repeat="grade in grades track by grade.id" class="grade-checkbox">
+                        <input type="checkbox"  value="[{grade.id}]" ng-change= "changeSearchGrades(grade.id);" ng-model="grade.Selected"/>
+                        <label for="[{grade.id}]">[{grade.grade}]</label>
+                    </span>
+                </div>
+                <p ng-show="grades_not_selected" class="error">Please select grades</p>
+                <div class="form-group">
+                    <label for="addEmployee-form-grade">Days:</label>
+                    <span ng-repeat="day in days track by day.id" class="grade-checkbox">
+                        <input type="checkbox" ng-model="day.Selected" value="[{day.id}]" ng-change= "changeSearchDays(day.id);"/>
+                        <label for="[{day.id}]">[{day.day}]</label>
+                    </span>
+                </div>
+                <p ng-show="days_not_selected" class="error">Please select days</p>
+                <div class="form-group" style="display:inline-block;margin-right:150px">
+                    <label style="width:50px;">From:</label>
+                    <input data-provide="datepicker"  name="" data-date-format="yyyy-mm-dd" style="text-align: center" placeholder="Select a date" ng-model="search.start_date" required>
+
+                </div>
+                <div class="form-group" style="display:inline-block;">
+                    <label style="width:30px;">To:</label>
+                    <input data-provide="datepicker"  name="" data-date-format="yyyy-mm-dd" style="text-align: center" placeholder="Select a date" ng-model="search.end_date" required>
+                </div>
+                <p ng-show="search_invalid_dates" class="error"> Search start_date is graeter than end_date</p>
+                <button type="submit" ng-click="search_employees_form.$valid && searchEmployees() && $event.stopPropagation();" class="btn btn-primary" id="search_button"><span class="glyphicon glyphicon-search" style="margin-right:10px;"></span><span>Search</span></button>
+             </form>
+        </div>  <!--Closing of   Search employee from div--> 
+        <button type="button" ng-click="getAllEmployees() && $event.stopPropagation();" class="btn btn-primary" id="show_all_employees_button" ng-show="show_search_employees_form"></span><span>Show all employees</span></button>
+    </div><!--closing of form_block"-->
+
+    <div id="employee_table_div" ng-cloak>
+        <table ng-show="emp.length>0 && !show_search_employees_form && !show_add_employee_form">
+            <tr>
+                <th> Employee Name</th>
+                <td style="padding: 0px;">
+                    <table style="width: 100%;margin-top:5px;padding:0px;border:none;">
+                        <tr><b>Assignments</b></tr>
+                        <tr colspan="3">
+                            <th class="child_table_col">Title</th>
+                            <th class="child_table_col">Start Date</th>
+                            <th class="child_table_col">End Date</th>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr ng-repeat = "emp in emp track by $index" style="border:2px solid black;padding: 0px;">
+                <td>[{emp.user.username}]</td>
+                <td ng-if="emp.assignments.length>0" style="padding:0px;height:100%;">
+                    <table style="width: 100%;padding:0px;height: 100%;border: none;">
+
+                        <tr ng-repeat="assignment in emp.assignments track by $index">
+                            <td class="child_table_col">[{assignment.title}]</td>
+                            <td class="child_table_col">[{assignment.start_date | date}]</td>
+                            <td class="child_table_col">[{assignment.end_date | date}]</td>
+                        </tr>
+                    </table>
+                </td>
+                <td ng-if="emp.assignments.length==0">
+                    No assignments
+                </td>
+                <td class="add_assignment_button_column">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#AssignmentModal" ng-click="addAssignmentInit(emp);" style="display: inline-block;vertical-align: middle;">Add Assignment</button>
+                </td>
+            </tr>
+                
+            
+        </table>
+    </div><!--closing of employee_table_div-->    
+    <div ng-show="emp.length==0 && all_emp.length==0 && !show_add_employee_form &&!show_search_employees_form" id="no_employees_to_show" ng-cloak>
         You dont have any employees to show
     </div>
 
- <div class="modal fade" id="AssignmentModal" tabindex="-1" role="dialog" aria-labelledby="AssignmentModalLabel" aria-hidden="true">
+    <div id="employee_table_div" ng-cloak>
+        <table ng-show="all_emp.length>0 && !show_search_employees_form && !show_add_employee_form">
+            <tr>
+                <th> Employee Name</th>
+                <th style="width:15%;">Grdaes</th>
+                <th style="width:15%;">Days</th>
+                <td style="padding: 0px;">
+                    <table style="width: 100%;margin-top:5px;padding:0px;border:none;">
+                        <tr><b>Assignments</b></tr>
+                        <tr colspan="3">
+                            <th class="child_table_col">Title</th>
+                            <th class="child_table_col">Start Date</th>
+                            <th class="child_table_col">End Date</th>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr ng-repeat = "emp in all_emp track by $index" style="border:2px solid black;padding: 0px;">
+                <td>[{emp.user.username}]</td>
+                <td>
+                    <div ng-repeat="grade in emp.grades" style="margin-right:8px">[{grade.grade}]</div>
+                    <span ng-if="emp.grades.length==0">No grades assigned</span>
+                </td>
+                <td>
+                    <div ng-repeat="day in emp.days" style="margin-right:8px">[{day.day}]</div>
+                    <span ng-if="emp.days.length==0">No days assigned</span>
+                </td>
+                <td ng-if="emp.assignments.length>0" style="padding:0px;height:100%;">
+                    <table style="width: 100%;padding:0px;height: 100%;border: none;">
+
+                        <tr ng-repeat="assignment in emp.assignments track by $index">
+                            <td class="child_table_col">[{assignment.title}]</td>
+                            <td class="child_table_col">[{assignment.start_date | date}]</td>
+                            <td class="child_table_col">[{assignment.end_date | date}]</td>
+                        </tr>
+                    </table>
+                </td>
+                <td ng-if="emp.assignments.length==0">
+                    No assignments
+                </td>
+                <td class="add_assignment_button_column">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#AssignmentModal" ng-click="addAssignmentInit(emp);" style="display: inline-block;vertical-align: middle;">Add Assignment</button>
+                </td>
+            </tr>
+        </table>
+    </div><!--closing of employee_table_div-->
+    <div class="modal fade" id="AssignmentModal" tabindex="-1" role="dialog" aria-labelledby="AssignmentModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <form name="add_assignment_form" id="add_assignment_form">
                       <div class="modal-header">
+                        <span style="font-size:18px;"><b>Add Assignment</b></span>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
+                          <span aria-hidden="true" style="color:blue;">&times;</span>
                         </button>
-                        <div class="form-group">
-                            <label>Assignment Title:</label>
-                            <input type="text" placeholder="Enter Assignment Title" required ng-model="assignment.title" id="add_assignment_form_title">
-                        </div>  
                       </div>
                       <div class="modal-body">
                         <div class="form-group">
-                            <label>Description about Assignment:</label>
-                           <textarea placeholder="Describe the assignmnet"  required ng-model="assignment.description" id="add_assignment_form_desc"></textarea> 
+                            <label>Title:</label>
+                            <input type="text" placeholder="Enter Assignment Title" required ng-model="assignment.title" id="add_assignment_form_title" style="text-align:center;">
+                        </div>  
+                        <div class="form-group">
+                            <label>Description:</label>
+                           <textarea placeholder="Describe the assignmnet"  required ng-model="assignment.description" id="add_assignment_form_desc" style="text-align:center;"></textarea> 
                         </div>
                         <div class="form-group">
                             <label>Start Date:</label>
@@ -239,8 +235,7 @@
                         </p>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" ng-click=" add_assignment_form.$valid && assignAssignment();">Add Assignment</button>
+                        <button type="submit" class="btn btn-primary" ng-click=" add_assignment_form.$valid && assignAssignment();">Add</button>
                       </div>
                     </form>
                 </div>

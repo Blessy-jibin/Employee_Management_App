@@ -1,7 +1,5 @@
-
-
+//angular module
 var app	 = angular.module('app', ['ngCookies','ui.bootstrap','ngMaterial', 'ngMessages']);
-
 
 app.config(function($interpolateProvider) {
   // changing angular default template rendering to '{[{}]}'.
@@ -83,8 +81,6 @@ app.controller('loginController', function ($scope, $http, $rootScope, $cookies)
 	 };
 
 });
-
-
 
 app.controller("adminController", function($scope,$http, $rootScope, $cookies,$mdDialog,$q,$timeout) {
 
@@ -258,8 +254,6 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
             length = $scope.selectedEmployee.assignments.length;//check is there assignments there
             // no assignments add one
             if(length==0){
-                // $scope.selectedEmployee.assignments.push($scope.assignment);
-                // updateEmployee($scope.selectedEmployee.id,$scope.selectedEmployee)
                 addAssignment($scope.selectedEmployee.id,$scope.assignment);
             }
             //already assignment. check for dates
@@ -300,12 +294,11 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         }).then(function (data) {
             if(data.status == 200){
                 $scope.show_add_employee_form = false;
-                $scope.hide_add_employee_button = false;
                 uncheckAll();
                 $scope.sucess_creating_employee = true;
                 $timeout(function(){
                     $scope.sucess_creating_employee = false;
-                }, 2000);
+                }, 5000);
             }
         }, function (error) {
             if(error.status == 400){
@@ -314,6 +307,7 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
             }
         });
      };
+    
 
     $scope.searchEmployees = function(){
         var search_data = $scope.search;
@@ -321,33 +315,36 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         grades = search_data.grades;
         start_date = search_data.start_date;
         end_date = search_data.end_date;
-        console.log(search_data);
         if(days.length>0){
             days = days.join(",");
+            search_data.days = days;
+            $scope.days_not_selected = false;
         }
         else{
-            days ="";
+            $scope.days_not_selected = true;
         }
         if(grades.length>0){
             grades = grades.join(",");
+            search_data.grades = grades;
+            $scope.grades_not_selected = false;
         }
         else{
-            grades ="";
+            $scope.grades_not_selected = true;
         }
-        search_data.days = days;
-        search_data.grades = grades;
-        uncheckAll();
-        if(  new Date(end_date) >= new Date(start_date) )
+        if( new Date(end_date) >= new Date(start_date) )
         {
-            getEmployees(search_data,$cookies);
             $scope.search_invalid_dates = false;
         }else{
             $scope.search_invalid_dates = true;
         }
+        if(new Date(end_date) >= new Date(start_date) && days.length>0 && grades.length>0){
+            getEmployees(search_data,$cookies);
+            uncheckAll();
+        }
     }
 
     function getEmployees(search_data,$cookies) {
-        
+        $scope.all_emp = [];
         var headers = get_http_header($cookies);
         $http({
           method: 'GET',
@@ -365,7 +362,27 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
                 
             }
         });
-     };
+    };
+
+    $scope.getAllEmployees =function($cookies){
+        var headers = get_http_header($cookies);
+        $scope.emp = [];
+        $http({
+          method: 'GET',
+          url: '/all_employees',
+          headers: headers,
+        }).then(function (data) {
+            if(data.status == 200){
+                $scope.all_emp = data.data;
+                $scope.show_search_employees_form = false;
+            }
+        }, function (error) {
+            if(error.status == 400){
+                
+            }
+        });
+
+    }
     
     function uncheckAll() {
       angular.forEach($scope.grades, function (grade) {
@@ -386,31 +403,6 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
         min_date  = new Date(Math.min.apply(null,dates));
         return {'smallest_date':min_date , 'largest_date':max_date};
     }
-    // $scope.getEmployee = function(id){
-    //     var headers = get_http_header($cookies);
-    //     $http({
-    //       method: 'GET',
-    //       url: '/employee/'+id ,
-    //       headers: headers,
-    //       // params: search_data,
-    //     }).then(function (data) {
-    //         if(data.status == 200){
-    //              console.log(data.data);
-    //              $scope.selectedEmployee = new Employee();
-    //              $scope.selectedEmployee = data.data;
-    //         }
-    //     }, function (error) {
-    //         if(error.status == 401){
-                
-    //         }
-    //     });
-    // };
-
-    // $scope.showEmployee = function(emp){
-
-    //     $scope.selectedEmployee = new Employee();
-    //     $scope.selectedEmployee = emp;
-    // }
 
     function updateEmployee(id,employee_data){
         var headers = get_http_header($cookies);
@@ -438,7 +430,6 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
 
     function addAssignment(id,assignment){
         var headers = get_http_header($cookies);
-        // console.log(employee_data);
         data = {};
         data.employee_id = id;
         data.assignment = assignment;
@@ -464,26 +455,10 @@ app.controller("adminController", function($scope,$http, $rootScope, $cookies,$m
 
     };
 
-    $scope.get_date_in_YyMmDd = function(date){
-        date = new Date();
-       var dd = date.getDate();
-       var mm = date.getMonth()+1; //January is 0!
-        var yyyy = date.getFullYear();
-        if(dd<10){
-                dd='0'+dd;
-            } 
-        if(mm<10){
-           mm='0'+mm;
-            } 
-        formated_date = yyyy+'-'+mm+'/'+dd;
-        return formated_date;
-    }
-
 });
 
 app.controller("employeeController", function($scope,$http, $rootScope, $cookies,$mdDialog,$q) {
     
-    console.log('vvvv');
     $scope.initializeEmployeeController = function(){
         getEmployeeInfo();
         
@@ -513,14 +488,16 @@ app.controller("employeeController", function($scope,$http, $rootScope, $cookies
 
     $scope.acceptAssignment = function(assignment){
         console.log('accpet button clicked');
-        assignment.status = "accepted";
-        updateAssignment(assignment);
+        updated_assignment = angular.copy(assignment);
+        updated_assignment.status = "accepted";
+        updateAssignment(assignment,updated_assignment);
     };
 
     $scope.declineAssignment = function(assignment){
         console.log('decline buton clicked');
-        assignment.status = "declined";
-        updateAssignment(assignment);
+         updated_assignment = angular.copy(assignment);
+         updated_assignment.status = "declined";
+        updateAssignment(assignment,updated_assignment);
     };
 
     $scope.logout = function ($cookies) {
@@ -528,11 +505,9 @@ app.controller("employeeController", function($scope,$http, $rootScope, $cookies
         window.location.replace("/login");
     };
 
-    function updateAssignment(assignment){
+    function updateAssignment(assignment,updated_assignment){
         var headers = get_http_header($cookies);
-        // data ={}
-        // data.assignment = assignment;
-        data = assignment
+        data = updated_assignment;
         console.log(data);
         $http({
           method: 'PUT',
@@ -541,7 +516,8 @@ app.controller("employeeController", function($scope,$http, $rootScope, $cookies
           data: data,
         }).then(function (data) {
             if(data.status == 200){
-                $scope.selectedAssignment.status = data.data.status;
+                assignment.status = data.data.status;
+                console.log(',,',assignment);
                 
             }
         }, function (error) {

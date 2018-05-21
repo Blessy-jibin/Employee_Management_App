@@ -14,13 +14,7 @@ import os
 import urllib.parse as urlparse
 from django.conf import settings
 from datetime import datetime
-# from selenium import webdriver
-import sys;
-
-
-# DRIVER = settings.BASE_DIR+'/chrome_server/chromedriver'
-
-
+import sys
 
 class GradeSerializer(serializers.ModelSerializer):
 
@@ -60,9 +54,10 @@ class AssignmentSerializer(serializers.ModelSerializer):
         extra_kwargs = {'id':{'read_only':True}}
 
 
+
     def update(self,assignment_id,validated_data):
-        assignment = Assignment.objects.get(id=assignment_id)
-        title=validated_data.pop('title')    
+        assignment = Assignment.objects.get(pk=assignment_id)
+        title = validated_data.pop('title')    
         description = validated_data.pop('description')
         start_date = validated_data.pop('start_date')
         end_date = validated_data.pop('end_date')
@@ -72,6 +67,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         assignment.description = description
         assignment.start_date = start_date
         assignment.end_date = end_date
+        assignment.save()
         return assignment
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -84,7 +80,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
     grades = GradeSerializer(many=True,required=False)
     assignments = AssignmentSerializer(many=True,required=False)
     user =  UserSerializer(required=False)
-    
+
     def create(self,validated_data):
         emp = validated_data
         days = emp.pop('days')
@@ -106,6 +102,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
             grade_lis.append(g)
         employee.days.set(day_lis)
         employee.grades.set(grade_lis)
+        employee.save()
+        return employee
 
     def update(self,employee,validated_data):
           

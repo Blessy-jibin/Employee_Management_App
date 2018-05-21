@@ -1,32 +1,39 @@
+.navbar.navbar-default.navbar-fixed-top{
+	background-color: #0080ff;
+}
+
+#appname{
+	color: white;
+}
+
+#navbar_menu{
+	color: white;
+	vertical-align: middle;
+}
+
+.v-center{
+	transform: translateY(30%);
+}
+
+a#navbar_menu:hover{
+	background-color: #0080ff;
+}
+
 #employee_page_content{
 	margin-left: 50px;
 }
-
-#welcome_message{
-	margin-top: 60px;
-	margin-bottom: 20px;
-	/*font-weight: bold;*/
-	/*margin-left: 50px;*/
-	/*font-family: Impact, Charcoal, sans-serif;
-	font-size: 40px;*/
-}
-
-
-
 .pending{
 	color:red;
-	text-transform: capitalize;
 	margin-left: 10px;
 }
 .assignment_category{
 	font-weight: bold;
+	font-size: 20px;
 	text-decoration: underline;
-
 }
 
-#assignments > h4{
-	color:#3359cc;
-	font-weight: bold;
+#assignments {
+	margin-top: 80px;
 }
 
 table {

@@ -1,3 +1,40 @@
+.navbar.navbar-default.navbar-fixed-top{
+	background-color: #0033cc;
+}
+
+#appname{
+	color: white;
+}
+
+.allign_center{
+	display: block;
+	margin-top: 70px;
+	width: 80%;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+
+.form_block{
+	display: block;
+	width: 85%;
+	margin-right: auto;
+	margin-left: auto;
+
+}
+
+ a#nav_bar_menu:hover{
+	background-color: #0033cc;
+}
+
+.v-center{
+	transform: translateY(50%);
+}
+
+#nav_bar_menu{
+	color: white;
+}
+
 #admin_page_content{
 	margin-top:60px;
 }
@@ -27,36 +64,65 @@
 	vertical-align: middle;
 	text-align: center;
 }
+
 #add_employee span, #search_employee  span{
 	margin-left: 5px;
 	margin-right: 5px;
 	font-size: 16px;
 }
 #add_employee_div,#search_employees_div{
-	margin-top: 20px;
+	margin-top: 10px;
 	border: 1px solid grey;
 	padding: 20px;
-	width: 80%;
+	
 
 }
-#add_button,#search_button{
+#add_button{
+	margin-top: 10px;
 	margin-left: 40%;
-	width: 100px;	
+	width: 100px;
+	display: block;	
+	font-weight: bold;
+}
+
+#search_button{
+	margin-left:40%;
+	margin-top:10px;
+	width: 100px;
+	display: block;
+	font-weight: bold;
+}
+ #show_all_employees_button{
+ 	margin-top: 40px;
+ 	width: 200px;
+ 	display: inline-block;	
+ 	vertical-align: middle;	
+	font-weight: bold;
 }
 
 #search_employee{
 	margin-left: 20px;
 }
 
-#add_employee_form >.form-group label , #employee_form_assignmentLabel{
+#employee_form_assignmentLabel{
 	display: inline-block;
 	width: 150px;
 	vertical-align: middle;
 	margin-right:10px;
 }
 
-#add_employee_form >.form-group> .grade-checkbox > label{
+#add_employee_form >.form-group > label ,#search_employees_form >.form-group > label{
+	width:100px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right:10px;	
+}
+
+#add_employee_form >.form-group> .grade-checkbox > label,#search_employees_form >.form-group >.grade-checkbox>label{
 	width:80px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right:10px;
 }
 
 #add_employee_form > .form-group input[type="text"] , #add_employee_form > .form-group input[type="password"]{
@@ -80,11 +146,19 @@
 #employee_form_assignments label{
 	display: inline-block;
 }
+
 #employee_form_assignments span{
 	font-weight: normal;
 	margin-left: 10px;
 	display: inline-block;
 }
+#employee_table_div{
+	display: block;
+	width: 85%;
+	margin-right: auto;
+	margin-left: auto;
+}
+
 #employee_list{
 	margin-top: 10px;
 }
@@ -136,7 +210,6 @@ font-size: 15px;
 }
 
 .add_assignment_form_date{
-	margin-left: 10px;
 	vertical-align: middle;
 	display: inline-block;
 }
@@ -144,6 +217,7 @@ font-size: 15px;
 #add_assignment_form label{
 	vertical-align: middle;
 	display: inline-block;
+	width: 20%;
 }
 
 .error{
@@ -157,7 +231,7 @@ font-size: 15px;
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 80%;
+    width: 100%;
 }
 
 td, th {

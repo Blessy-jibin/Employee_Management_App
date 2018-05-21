@@ -28,14 +28,11 @@ import re
 import json
 import base64
 import os
-import urllib.parse as urlparse
 from django.conf import settings
 import datetime
 import hashlib
-from django.db.models import Q
+from django.db.models import Q , Count
 from itertools import chain
-
-DRIVER = settings.BASE_DIR+'/chrome_server/chromedriver'
 
 @api_view(["POST"])
 @authentication_classes([])
@@ -67,49 +64,24 @@ def adminpage(request):
 def employeepage(request):
     return render_to_response('employeepage.html',locals())
 
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# class Employee(generics.ListCreateAPIView):
-    """
-    List all employee, or create a new employee.
-    
-    """
-    # permission_classes = (IsAuthenticated,)
-    # serializer_class = EmployeeSerializer
-
-
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 class CreateEmployee(generics.ListCreateAPIView):
     """
-    List all employee, or create a new employee.
+    Create a new employee.
     
     """
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args,**kwargs):
-    	# user_serializer = UserSerializer(data=request.data)
-    	# if user_serializer.is_valid():
-    	# 	# user_serializer.save()
-    	# 	request.data.update({'user':user_serializer.data})
-    	# print(request.data)
-    	# user = request.data.get('user')
-    	# user_serializer = UserSerializer(data=user)
-    	# if user_serializer.is_valid():
-    	# 	user_serializer.save()
-    	# 	user = User.objects.get(id=user_serializer.data.get('id'))
-    	# 	print('mmmmmm',request.data)
+    	
     	emp_serializer = EmployeeSerializer(data=request.data)
     	if emp_serializer.is_valid():
     		emp_serializer.save()
     		print(emp_serializer.data)
     		return Response(emp_serializer.data)
     	return Response(emp_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    	# return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
-
-
-
-    
+    	
 
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -133,6 +105,16 @@ class GetGrades(generics.ListCreateAPIView):
 	serializer_class = GradeSerializer
 	queryset = Grade.objects.all()
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+class GetAllEmployees(generics.ListCreateAPIView):
+	"""
+    List all employees
+    
+    """
+	permission_classes = (IsAuthenticated,)
+	serializer_class = EmployeeSerializer
+	queryset = Employee.objects.all()
 
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -147,14 +129,11 @@ class LoggedInEmployeeInfo(generics.ListCreateAPIView):
 		except Employee.DoesNotExist:
 			raise Http404
 
-
-
-
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 class SearchEmployee(generics.ListCreateAPIView):
     """
-    List all employee.
+    Serach employee
     
     """
     permission_classes = (IsAuthenticated,)
@@ -173,28 +152,24 @@ class SearchEmployee(generics.ListCreateAPIView):
         	end_date = datetime.datetime.strptime(end_date,"%Y-%m-%d" ).strftime("%Y-%m-%d")
         else:
         	end_date = today
-        if not days_string:
-        	days =Day.objects.all()
-        else:
-        	days =  days_string.split(',')
-        if not grades_string:
-        	grades = Grade.objects.all()
-        else:
-        	grades = grades_string.split(',')
-        employees = Employee.objects.filter(days__in=days,grades__in=grades).distinct()
-        free_employees = []
-        temp = []
+        days =  days_string.split(',')
+        grades = grades_string.split(',')
+        print(grades)
+        employees = Employee.objects.filter(days__in=days,grades__in=grades).annotate(num_days=Count('days',distinct=True),num_grades=Count('grades',distinct=True)).filter(num_days=len(days),num_grades=len(grades))
+        employees = sorted(employees, key = lambda x: x.id) #sorting employess accoring to creation
+        free_employees = [] #employees with assignment
+        employees_without_assignment = [] #employees without any assignment
         for employee in employees:
         	assignments = employee.assignments.all()
         	if assignments:
+        		#check if emplyee has already assignment in the time period
         		invalid_assignments = employee.assignments.filter(~(Q(start_date__gt=end_date)| Q(end_date__lt=start_date)))
-        		# invalid_assignments = employee.assignments.exclude(id__in=valid_assignments)
         		if not invalid_assignments:
+        			#if not any assignment in the time period
         			free_employees.append(employee)
         	else:
-        		temp.append(employee)
-        
-        free_employees = free_employees + temp
+        		employees_without_assignment.append(employee)
+        free_employees = free_employees + employees_without_assignment
         emp_serializer = EmployeeSerializer(free_employees,many=True)
         return Response(emp_serializer.data)
 
